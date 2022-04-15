@@ -14,7 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_quiz.*
 
-class QuizActivity : AppCompatActivity(), View.OnClickListener {
+class QuizActivity : AppCompatActivity() {
 
     var quizList = ArrayList<Question>()
     var numCorrectAns: Int = 0
@@ -35,25 +35,31 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         //answer1.setOnClickListener(this)
         //answer2.setOnClickListener(this)
         //answer3.setOnClickListener(this)
-        submit.setOnClickListener(this)
+        //submit.setOnClickListener(this)
     }
-    //A function to set the view of selected option view.
-    private fun selectedOptionView(tv: TextView, selectedOptionNum: Int) {
-        defaultOptionsView()
-        SelectedAnsPosition = selectedOptionNum
+    
+    
+    fun setQuestion() {
+        // Getting the question from the list with the help of current position.
+        val question = quizList.get(currentQuizIndex - 1)
+        if (currentQuizIndex == quizList.size) {
+            submit.text = "FINISH"
+        } else {
+            submit.text = "SUBMIT"
+        }
 
-        tv.setTextColor(
-            Color.parseColor("#000000")
-        )
-        tv.setTypeface(tv.typeface, Typeface.BOLD)
-        tv.background = ContextCompat.getDrawable(
-            this@QuizActivity,
-            R.drawable.selected_option_border_bg
-        )
+        progressBar.progress = currentQuizIndex
+        progress.text = "$currentQuizIndex" + "/" + progressBar.getMax()
+
+        txtQuestion.text = question.ques
+        answer1.text = question.ans1
+        answer2.text = question.ans2
+        answer3.text = question.ans3
     }
 
-    private fun defaultOptionsView() {
 
+
+    private fun defaultAnswerView() {
         val ans = ArrayList<TextView>()
         ans.add(0, answer1)
         ans.add(1, answer2)
@@ -69,18 +75,33 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    //A function to set the view of selected answer view.
+    private fun selectedAnswerView(tv: TextView, selectedAnsNum: Int) {
+        defaultAnswerView()
+        SelectedAnsPosition = selectedAnsNum
 
-    override fun onClick(v: View?) {
+        tv.setTextColor(
+            Color.parseColor("#000000")
+        )
+        tv.setTypeface(tv.typeface, Typeface.BOLD)
+        tv.background = ContextCompat.getDrawable(
+            this@QuizActivity,
+            R.drawable.selected_option_border_bg
+        )
+    }
+
+
+    fun onClick(v: View?) {
 
         when (v?.id) {
             R.id.answer1 -> {
-                selectedOptionView(answer1, 1)
+                selectedAnswerView(answer1, 1)
             }
             R.id.answer2 -> {
-                selectedOptionView(answer2, 2)
+                selectedAnswerView(answer2, 2)
             }
             R.id.answer3 -> {
-                selectedOptionView(answer3, 3)
+                selectedAnswerView(answer3, 3)
             }
             R.id.submit -> {
                 if (SelectedAnsPosition == 0) {
@@ -117,87 +138,8 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-// A function for setting the question to UI components.
-
-    fun setQuestion() {
-
-        val question = quizList.get(currentQuizIndex - 1) // Getting the question from the list with the help of current position.
-        if (currentQuizIndex == quizList.size) {
-            submit.text = "FINISH"
-        } else {
-            submit.text = "SUBMIT"
-        }
-
-        progressBar.progress = currentQuizIndex
-        progress.text = "$currentQuizIndex" + "/" + progressBar.getMax()
-
-        txtQuestion.text = question.ques
-        answer1.text = question.ans1
-        answer2.text = question.ans2
-        answer3.text = question.ans3
-    }
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //showQuestion(quizs.get(currentQuizIndex))
-    }
-
-   // fun showQuestion(quiz: GetQuiz){
-        //txtQuestion.setText()
-        //answer1.setText(quiz.answer1)
-        //answer2.setText(quiz.answer2)
-        //answer3.setText(quiz.answer3)
-    //}
-
-
-
-   /* fun checkAnswer(ansID: Int){
-        val quiz = quizs.get(currentQuizIndex)
-
-        if(quiz.isCorrect(ansID)){
-            numCorrectAns++
-            Toast.makeText(this, "+1", Toast.LENGTH_SHORT).show()
-        } else{
-            Toast.makeText(this,"+0", Toast.LENGTH_SHORT).show()
-        }
-        currentQuizIndex++
-
-        if(currentQuizIndex == quizs.size){
-            var notice = AlertDialog.Builder(this)
-            notice.setTitle("You finish the quiz");
-            notice.setMessage("You have " + numCorrectAns + "correct answers")
-            notice.setPositiveButton("OK") { dialog: DialogInterface, i: Int -> finish() }
-            notice.show()
-        }else{
-            showQuestion(quizs.get(currentQuizIndex))
-        }
-    }
-
-    fun onClickAnsOne(view:View){
-        checkAnswer(1)
-
-    }
-    fun onClickAnsTwo(view:View){
-        checkAnswer(2)
-    }
-    fun onClickAnsThree(view:View){
-        checkAnswer(3)
-    }
-
-}*/
