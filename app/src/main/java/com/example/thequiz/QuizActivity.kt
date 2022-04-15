@@ -137,7 +137,7 @@ class QuizActivity : AppCompatActivity() {
             }
         }
     }
-
+}
 
 
 
